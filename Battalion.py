@@ -3,9 +3,12 @@ class Battalion:
         self.battalion_number = number
         self.total_dispatch_count = 0
         self.total_dispatch_minutes = 0
+
         self.dispatch_time_avg = 0
+
         self.dispatch_type_counts = [0,0,0,0,0]
         self.total_dispatch_type_minutes = [0,0,0,0,0]
+
         self.dispatch_type_time_avgs = [0,0,0,0,0]
 
     def compute_avg_dispatch(self):

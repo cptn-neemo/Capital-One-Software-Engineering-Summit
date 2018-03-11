@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from .Battalion import Battalion
+from Battalion import Battalion
 
 
 def compute_difference_time(hour, minute, second):
@@ -14,9 +14,6 @@ def compute_difference_time(hour, minute, second):
      total_minute_0 = (hour[0] * 60) + minute[0] + (second[0] / 60)
      total_minute_1 = (hour[1] * 60) + minute[1] + (second[1] / 60)
      return total_minute_1 - total_minute_0
-
-
-
 
 
 df = pd.read_csv('./sfpd-dispatch/sfpd_dispatch_data_subset.csv')
@@ -53,37 +50,30 @@ for index, row in df.iterrows():
           minute_difference = compute_difference_time(hour, minute, second)
 
           if (minute_difference < 120):
-               battalion_dispatch_count[int(battalion) - 1] += 1
-               battalion_dispatch_total_dif[int(battalion) - 1] += minute_difference
+               battalions[int(battalion) - 1].total_dispatch_count += 1
+               battalions[int(battalion) - 1].total_dispatch_minutes += minute_difference
 
           if (type_of_call == "Medical Incident"):
-               type_of_call_count[0] += 1
-               type_of_call_total[0] += minute_difference
+               battalions[int(battalion) - 1].dispatch_type_counts[0] += 1
+               battalions[int(battalion) - 1].total_dispatch_type_minutes[0] += minute_difference
           elif ("Fire" in type_of_call):
-               type_of_call_count[1] += 1
-               type_of_call_total[1] += minute_difference
+               battalions[int(battalion) - 1].dispatch_type_counts[1] += 1
+               battalions[int(battalion) - 1].total_dispatch_type_minutes[1] += minute_difference
           elif (type_of_call == "Traffic Collision"):
-               type_of_call_count[2] += 1
-               type_of_call_total[2] += minute_difference
+               battalions[int(battalion) - 1].dispatch_type_counts[2] += 1
+               battalions[int(battalion) - 1].total_dispatch_type_minutes[2] += minute_difference
           elif (type_of_call == "Alarms"):
-               type_of_call_count[3] += 1
-               type_of_call_total[3] += minute_difference
+               battalions[int(battalion) - 1].dispatch_type_counts[3] += 1
+               battalions[int(battalion) - 1].total_dispatch_type_minutes[3] += minute_difference
           else:
-               type_of_call_count[4] += 1
-               type_of_call_total[4] += minute_difference
+               battalions[int(battalion) - 1].dispatch_type_counts[4] += 1
+               battalions[int(battalion) - 1].total_dispatch_type_minutes[4] += minute_difference
 
-
-
-battalion_response_time_avg = [0,0,0,0,0,0,0,0,0]
-
-for i in range(9):
-     battalion_response_time_avg[i] = battalion_dispatch_total_dif[i] / battalion_dispatch_count[i]
 
 
 
 print(battalionCount)
-print(battalion_response_time_avg)
-print(type_of_call_count)
+print("Battalion 1: " + str(battalions[1].dispatch_type_counts[1]) )
 
 
 
