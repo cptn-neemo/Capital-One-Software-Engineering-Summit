@@ -1,0 +1,190 @@
+Battalion: 1
+Total dispatches: 878
+Average dispatch time: 8.874
+Medical Incident
+   Count: 568
+   Avg dispatch time: 9.912
+Fire
+   Count: 107
+   Avg dispatch time: 7.307
+Traffic Collision
+   Count: 19
+   Avg dispatch time: 7.726
+Alarms
+   Count: 143
+   Avg dispatch time: 6.521
+Other
+   Count: 41
+   Avg dispatch time: 7.336
+
+Battalion: 2
+Total dispatches: 1523
+Average dispatch time: 8.941
+Medical Incident
+   Count: 1163
+   Avg dispatch time: 9.489
+Fire
+   Count: 119
+   Avg dispatch time: 6.341
+Traffic Collision
+   Count: 75
+   Avg dispatch time: 8.948
+Alarms
+   Count: 126
+   Avg dispatch time: 6.479
+Other
+   Count: 40
+   Avg dispatch time: 8.514
+
+Battalion: 3
+Total dispatches: 1286
+Average dispatch time: 10.147
+Medical Incident
+   Count: 933
+   Avg dispatch time: 10.674
+Fire
+   Count: 81
+   Avg dispatch time: 7.044
+Traffic Collision
+   Count: 35
+   Avg dispatch time: 8.819
+Alarms
+   Count: 178
+   Avg dispatch time: 7.261
+Other
+   Count: 59
+   Avg dispatch time: 15.565
+
+Battalion: 4
+Total dispatches: 766
+Average dispatch time: 8.211
+Medical Incident
+   Count: 519
+   Avg dispatch time: 9.006
+Fire
+   Count: 95
+   Avg dispatch time: 6.218
+Traffic Collision
+   Count: 12
+   Avg dispatch time: 6.65
+Alarms
+   Count: 81
+   Avg dispatch time: 6.407
+Other
+   Count: 59
+   Avg dispatch time: 7.229
+
+Battalion: 5
+Total dispatches: 674
+Average dispatch time: 8.333
+Medical Incident
+   Count: 466
+   Avg dispatch time: 8.972
+Fire
+   Count: 79
+   Avg dispatch time: 6.823
+Traffic Collision
+   Count: 23
+   Avg dispatch time: 7.496
+Alarms
+   Count: 71
+   Avg dispatch time: 7.285
+Other
+   Count: 35
+   Avg dispatch time: 5.921
+
+Battalion: 6
+Total dispatches: 612
+Average dispatch time: 8.799
+Medical Incident
+   Count: 422
+   Avg dispatch time: 9.634
+Fire
+   Count: 53
+   Avg dispatch time: 6.793
+Traffic Collision
+   Count: 34
+   Avg dispatch time: 7.966
+Alarms
+   Count: 66
+   Avg dispatch time: 6.632
+Other
+   Count: 37
+   Avg dispatch time: 6.771
+
+Battalion: 7
+Total dispatches: 366
+Average dispatch time: 8.948
+Medical Incident
+   Count: 261
+   Avg dispatch time: 9.487
+Fire
+   Count: 39
+   Avg dispatch time: 6.297
+Traffic Collision
+   Count: 17
+   Avg dispatch time: 8.025
+Alarms
+   Count: 34
+   Avg dispatch time: 9.128
+Other
+   Count: 15
+   Avg dispatch time: 7.091
+
+Battalion: 8
+Total dispatches: 621
+Average dispatch time: 9.953
+Medical Incident
+   Count: 453
+   Avg dispatch time: 10.208
+Fire
+   Count: 53
+   Avg dispatch time: 12.025
+Traffic Collision
+   Count: 21
+   Avg dispatch time: 6.929
+Alarms
+   Count: 59
+   Avg dispatch time: 7.386
+Other
+   Count: 35
+   Avg dispatch time: 9.656
+
+Battalion: 9
+Total dispatches: 625
+Average dispatch time: 10.386
+Medical Incident
+   Count: 459
+   Avg dispatch time: 11.081
+Fire
+   Count: 56
+   Avg dispatch time: 7.636
+Traffic Collision
+   Count: 40
+   Avg dispatch time: 9.386
+Alarms
+   Count: 40
+   Avg dispatch time: 7.215
+Other
+   Count: 30
+   Avg dispatch time: 10.451
+
+Battalion: 10
+Total dispatches: 663
+Average dispatch time: 10.415
+Medical Incident
+   Count: 480
+   Avg dispatch time: 11.005
+Fire
+   Count: 52
+   Avg dispatch time: 7.746
+Traffic Collision
+   Count: 42
+   Avg dispatch time: 9.959
+Alarms
+   Count: 42
+   Avg dispatch time: 8.812
+Other
+   Count: 47
+   Avg dispatch time: 9.192
+

@@ -6,4 +6,6 @@ Deliverables:
 
 Potential questions...
 
-1. 
+1. Types of calls per battalion?
+2. Longest type of call to dispatch per battalion?
+3. Amount of calls per battalion?
