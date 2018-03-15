@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+            * element that contains the map. */
+        #map {
+            height: 100%;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+    <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase-database.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/map.css">
+
+     <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyBkpYNnHgJPc7GTrtKzgpCKnR2NvpFYh4s",
+            authDomain: "capital-one-submission.firebaseapp.com",
+            databaseURL: "https://capital-one-submission.firebaseio.com",
+            projectId: "capital-one-submission",
+            storageBucket: "capital-one-submission.appspot.com",
+            messagingSenderId: "716665177178"
+        };
+        firebase.initializeApp(config);
+
+        var database = firebase.database();
+
+        var dispatches;
+
+        firebase.database().ref('/').once('value').then(function(snapshot) {
+            dispatches = snapshot.val();
+            console.log('before snapshot:');
+            console.log(snapshot.val());
+        });
+        
+    </script>
+
+</head>
+<body>
+    <div class = "container-fluid" id = "top">
+        
+        <h1>Capital One Software Engineering Summit</h1>
+        <h3>Max Huddleston</h3>
+
+        <nav class="navbar navbar-expand navbar-light">
+                <ul class = "navbar navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link" href="#">Map</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Battalions</a>
+                    </li>
+                </ul>
+        </nav>
+          
+    </div>
+
+    <div class = "container-fluid">
+        <h1 style = "text-align: center; margin-top:2%;">Map of San Francisco</h1>
+        <div class = "row justify-content-center" style = "margin-top: 0;">
+            <div class="col-6 d-flex">
+                <div id = "map"></div>
+            </div>
+        </div>
+
+        <button class = "btn" onclick="toggleHeatMap()">Toggle Heatmap</button>
+
+    </div>
+    
+
+
+   
+    
+
+   <script>
+       var map;
+       function initMap() {
+           map = new google.maps.Map(document.getElementById('map'), {
+               center: {lat: 37.7532508, lng: -122.460038},
+               zoom: 12
+           });
+
+           console.log(map);
+       }
+
+       function toggleHeatMap() {
+           heatMapData = [];
+           console.log('In toggle heatmap');
+
+           for (var dispatch in dispatches) {
+                if (dispatches.hasOwnProperty(dispatch)) {
+                    var val = dispatches[dispatch];                   
+                    heatMapData.push(new google.maps.LatLng(val.lat, val.long))
+                }
+            }
+
+           console.log(heatMapData);
+
+           var heatmap = new google.maps.visualization.HeatmapLayer({
+                data: heatMapData
+            });
+            heatmap.setMap(map);
+       }
+   </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUTCQV_cW4Au-3run5FUQ2kUJ7JAzXj9c&callback=initMap&libraries=visualization"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,8 +1,6 @@
-.background {
-    height: 100vh;
-    background-color: dimgray;
+html, body {
+    background-color: #d4d8dd;
 }
-
 body {
     margin: 0;
 }
@@ -14,10 +12,11 @@ body {
 .navbar {
     margin-top: 0px;
     margin:0px;
+    background-color: #adadad;
 }
 
 #top {
-    background-color: black;
+    background-color: #6d6d6d;
     text-align: center;
     font-size: 30;
     margin-bottom: 0;
