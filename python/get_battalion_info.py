@@ -20,6 +20,8 @@ for index, row in df.iterrows():
 
      type_of_call = row['call_type']
 
+
+
      lat = row['latitude']
      long = row['longitude']
 

@@ -1,3 +1,5 @@
 Updated Battalion information:
 https://api.myjson.com/bins/ux6tx
+Station Geolocations:
+https://api.myjson.com/bins/q5f9v
 

@@ -24,10 +24,14 @@
     <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase-database.js"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/map.css">
 
-     <script>
+    <script src = "./js/map.js"></script>
+    <script src = "./js/address.js"></script>
+    <script>
+        var clearMap;
+        var curHeatMap = false;
         // Initialize Firebase
         var config = {
             apiKey: "AIzaSyBkpYNnHgJPc7GTrtKzgpCKnR2NvpFYh4s",
@@ -37,18 +41,28 @@
             storageBucket: "capital-one-submission.appspot.com",
             messagingSenderId: "716665177178"
         };
+        
         firebase.initializeApp(config);
 
         var database = firebase.database();
 
         var dispatches;
-
+        var loaded;
         firebase.database().ref('/').once('value').then(function(snapshot) {
             dispatches = snapshot.val();
-            console.log('before snapshot:');
-            console.log(snapshot.val());
+            getData();
         });
-        
+    </script>
+    <script>
+        function initialize() {
+            initMap();
+        }
+
+        var slider = document.getElementById("hourSlider");
+
+        slider.onchange = function() {
+            console.log('herro');
+        }
     </script>
 
 </head>
@@ -61,13 +75,16 @@
         <nav class="navbar navbar-expand navbar-light">
                 <ul class = "navbar navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Home</a>
+                        <a class="nav-link" href="./index.html">Home</a>
                     </li>
                     <li class="nav-item">
-                            <a class="nav-link" href="#">Map</a>
+                            <a class="nav-link" href="./map.html">Map</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Battalions</a>
+                    </li>
+                    <li class = "nav-item">
+                        <a class="nav-link" href="./address_predictor.html">Dispatch Predictor</a>
                     </li>
                 </ul>
         </nav>
@@ -75,54 +92,54 @@
     </div>
 
     <div class = "container-fluid">
-        <h1 style = "text-align: center; margin-top:2%;">Map of San Francisco</h1>
+        <h1 style = "text-align: center; margin-top:2%;">Dispatches in San Francisco</h1>
         <div class = "row justify-content-center" style = "margin-top: 0;">
             <div class="col-6 d-flex">
-                <div id = "map"></div>
+                <div id = "map" value = "false"></div>
             </div>
+            <div class = "col-6">
+                <div class = "row">
+                    <div class = "btn-group-vertical col-6">
+                        <h1>Options</h1>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" onclick="onAllClick()" id="allCheckbox">
+                            <label class="form-check-label" for="allCheckbox">All</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="medicalCheckbox">
+                            <label class="form-check-label" for="medicalCheckbox">Medical Incidents</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="trafficCheckbox">
+                            <label class="form-check-label" for="trafficCheckbox">Traffic Collisions</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="fireCheckbox">
+                            <label class="form-check-label" for="fireCheckbox">Fires</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="alarmCheckbox">
+                            <label class="form-check-label" for="alarmCheckbox">Alarms</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="otherCheckbox">
+                            <label class="form-check-label" for="otherCheckbox">Other</label>
+                        </div>
+
+                        <button class = "btn btn-success" onclick="toggleHeatMap()">Toggle Heatmap</button>
+                    </div>
+                
+                    <div class = "col-6">
+                        <h1>Instructions</h1>
+                        <p>This heatmap displays the distribution of dispatches in the city of San Francisco. Click the checkboxes to choose which dispatches to see, then toggle the heatmap.</p>
+                    </div>
+                </div>
+
+
         </div>
-
-        <button class = "btn" onclick="toggleHeatMap()">Toggle Heatmap</button>
-
     </div>
-    
 
-
-   
-    
-
-   <script>
-       var map;
-       function initMap() {
-           map = new google.maps.Map(document.getElementById('map'), {
-               center: {lat: 37.7532508, lng: -122.460038},
-               zoom: 12
-           });
-
-           console.log(map);
-       }
-
-       function toggleHeatMap() {
-           heatMapData = [];
-           console.log('In toggle heatmap');
-
-           for (var dispatch in dispatches) {
-                if (dispatches.hasOwnProperty(dispatch)) {
-                    var val = dispatches[dispatch];                   
-                    heatMapData.push(new google.maps.LatLng(val.lat, val.long))
-                }
-            }
-
-           console.log(heatMapData);
-
-           var heatmap = new google.maps.visualization.HeatmapLayer({
-                data: heatMapData
-            });
-            heatmap.setMap(map);
-       }
-   </script>
-
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUTCQV_cW4Au-3run5FUQ2kUJ7JAzXj9c&callback=initMap&libraries=visualization"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUTCQV_cW4Au-3run5FUQ2kUJ7JAzXj9c&callback=initialize&libraries=visualization,places"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
