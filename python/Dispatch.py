@@ -1,6 +1,6 @@
 import json
 
-class Alarm:
+class Dispatch:
     def __init__(self, type, time, battalion_number, lat, long, id):
         self.type = type
         self.time = time

@@ -1,15 +1,16 @@
 import pandas as pd
 from Battalion import Battalion
 from Helper import Helper
-from Alarm import Alarm
+from Dispatch import Dispatch
 
 df = pd.read_csv('../sfpd-dispatch/sfpd_dispatch_data_subset.csv')
-
 
 battalions = [Battalion(1), Battalion(2), Battalion(3), Battalion(4), Battalion(5), Battalion(6),
               Battalion(7), Battalion(8), Battalion(9), Battalion(10)]
 
-alarm_list = []
+dispatch_list = []
+
+day_count_list = {}
 
 for index, row in df.iterrows():
      battalion = row['battalion']
@@ -20,10 +21,15 @@ for index, row in df.iterrows():
 
      type_of_call = row['call_type']
 
-
-
      lat = row['latitude']
      long = row['longitude']
+
+     day = received_time[:10]
+
+     if day in day_count_list:
+         day_count_list[day] = day_count_list.get(day) + 1
+     else:
+         day_count_list[day] = 1
 
      #If either timestamp is NaN, it will be considered a float
      if (type(received_time) is str and type(on_scene_time) is str):
@@ -53,25 +59,17 @@ for index, row in df.iterrows():
                     battalions[int(battalion) - 1].dispatch_type_counts[4] += 1
                     battalions[int(battalion) - 1].total_dispatch_type_minutes[4] += minute_difference
 
-          alarm_received_time = Helper.get_time(received_time)
-          alarm_list.append(Alarm(type_of_call, alarm_received_time, battalion, lat, long, index))
+          dispatch_received_time = Helper.get_time(received_time)
+          dispatch_list.append(Dispatch(type_of_call, dispatch_received_time, battalion, lat, long, index))
 
 
 for i in range(len(battalions)):
      battalions[i].compute_avg_dispatch()
      battalions[i].compute_type_dispatch_avg()
-     Helper.get_most_likely_dispatch(alarm_list, battalions[i])
+     Helper.get_most_likely_dispatch(dispatch_list, battalions[i])
 
 
 Helper.write_to_txt('../sfpd-dispatch/battalion-data.txt', battalions)
 Helper.write_to_json('../sfpd-dispatch/batallion-data.json', battalions, 'Battalion', len(battalions))
-
-
-
-
-
-
-
-
-
-
+Helper.write_to_json('../sfpd-dispatch/dispatch.json', dispatch_list, 'Dispatch', len(dispatch_list))
+Helper.write_day_counts(day_count_list)
