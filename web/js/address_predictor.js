@@ -1,8 +1,9 @@
 var battalions;
 var stations;
+var closestStation;
 initVars();
 
-
+//Init the variables used for the address predictor
 function initVars() {
     $.getJSON('https://api.myjson.com/bins/ux6tx', function(data) {
         battalions = data;  
@@ -13,6 +14,10 @@ function initVars() {
     });
 }
 
+/*
+ * Set the event for when the slider value is changed
+ * @param val: current value of the slider
+*/
 function onSliderChange(val) {
     var time;
 
@@ -25,9 +30,13 @@ function onSliderChange(val) {
     } else {
         time = "" + val + ":00 AM";
     }
+
     $('#timeText').text(time);
 }
 
+/*
+ * Initialize the geocoder
+*/
 function initGeo() {
     var geocoder = new google.maps.Geocoder();
     document.getElementById('submitButton').addEventListener('click', function() {
@@ -35,9 +44,15 @@ function initGeo() {
     });
 }
 
+/*
+ * Get the location of the address
+ * @param geocoder: The google maps geocoder object
+*/
 function geocodeAddress(geocoder) {
+
     var address = document.getElementById('address').value;
 
+    //Initialize the bounds for the geocoder
     var data = {
         bounds: {
           west: 37.703021,
@@ -51,14 +66,18 @@ function geocodeAddress(geocoder) {
         new google.maps.LatLng(data.bounds.south, data.bounds.west), 
         new google.maps.LatLng(data.bounds.north, data.bounds.east));
 
+    //Check for a value not being entered in the address field.
     if (address == "")
         alert('Please enter an address in the address field.');
     else {
+
         geocoder.geocode({'address': address, 'bounds':bounds}, function(results, status) {
+            //If the status was 'OK', then display the panel and initialize the Map
             if (status === 'OK') {
                 displayStats(results);
+                initMap(results[0]);
             } else {
-            alert('Geocode was not successful for the following reason: ' + status);
+                alert('Geocode was not successful. Either an incorrect address was entered, or the address is not in the San Francisco area.');
             }
         });
     }
@@ -68,42 +87,58 @@ function displayStats(results) {
 
     document.getElementById("probability-card").style.visibility = "visible";
     
+    //Get the actual geodata
     var geodata = results[0];
-    console.log(geodata);
 
+    //Find the battalion the address lies in
     battalion = findBattalion(geodata);
 
     var time = document.getElementById('hourSlider').value;
-
-    var most_likely_dispatch = battalion.most_likely_dispatch[time];
+    console.log(time)
+    var dispatch_probabilities = battalion.most_likely_dispatch[time];
     
-    var probs = {};
+    //Keep a dictionary of the key being the probability and the value being the type of dispatch
+    var probabilities = {};
 
-    for (i = 0; i < most_likely_dispatch.length; i++) {
-        probs[most_likely_dispatch[i]] = battalion.dispatch_types[i];
+    //Set the dictionary
+    for (i = 0; i < dispatch_probabilities.length; i++) {
+        probabilities[dispatch_probabilities[i]] = battalion.dispatch_types[i];
     }
 
-    most_likely_dispatch.sort().reverse();
+    //Sort and reverse the dispatches to display them from greatest to least
+    dispatch_probabilities.sort().reverse();
 
+    //Loop through the <h5>s with the ID likely, and set the text to the probabilities
     $('h5[id^="likely"]').each(function(index) {
-        var curProb = (most_likely_dispatch[index] * 100).toFixed(2);
-        $(this).text(probs[most_likely_dispatch[index]] + ": " + curProb  + "%");
+        var curProb = (dispatch_probabilities[index] * 100).toFixed(2);
+
+        //Used the probabilities dict to dispaly the type of dispatch
+        $(this).text(probabilities[dispatch_probabilities[index]] + ": " + curProb  + "%");
     })
 }
 
+/*
+ *Find the battalion associated with a given location
+ *@param geodata: the location of the address
+*/
 function findBattalion(geodata) {
-    var closestStation = 1;
+    closestStation = 1;
+
+    //Set the location variable
     var loc = geodata.geometry.location;
-    var closestDistance = 10;
+    var closestDistance;
 
     //45 stations
     for (i = 1; i < 46; i++) {
+
+        //Get the differences in lat and lng, then apply Pythagorean thm to get distance
         var latDif = loc.lat() - stations[i][0];
         var longDif = loc.lng() - stations[i][1];
 
         var totalDif = Math.sqrt(Math.pow(latDif,2) + Math.pow(longDif,2));
 
         if (i==1) {
+            //Set the first closest difference
             closestDistance = totalDif;
         }
         else {
@@ -131,6 +166,7 @@ function findBattalion(geodata) {
     else if (closestStation == 45)
         actualStationNumber = 51;
     
+    //Get the battalion associated with the closest station
     var battalion_number = stationToBattalion(actualStationNumber);
     
     for (var key in battalions) {
@@ -141,6 +177,9 @@ function findBattalion(geodata) {
     return battalion;
 }
 
+/*
+ * Find the battalion associated with a station number
+*/
 function stationToBattalion(stationNumber) {
     if (stationNumber == 2 || stationNumber == 13 || stationNumber == 28 || stationNumber == 41 )
         return 1;
@@ -166,10 +205,46 @@ function stationToBattalion(stationNumber) {
         return 10;
 }
 
-function getSize(obj) {
-    var size = 0, key;
-    for (key in obj) {
-        if (obj.hasOwnProperty(key)) size++;
-    }
-    return size;
+/*
+ * Initialize the google map
+*/
+function initMap(loc) {
+    var station = stations[closestStation];
+
+    //Set the lats and lngs for the markers
+    sLat = station[0];
+    sLng = station[1];
+    aLat  = loc.geometry.location.lat();
+    aLng = loc.geometry.location.lng();
+
+    //Set the path variable for the line between station and dispatch
+    var path = [
+        {lat: sLat, lng: sLng},
+        {lat: aLat, lng: aLng},
+    ]
+
+    var map = new google.maps.Map(document.getElementById('marker_map'), {
+        center: {lat: aLat, lng: aLng},
+        zoom: 12
+    });
+
+    var address_marker = new google.maps.Marker({
+        position: {lat: aLat, lng: aLng},
+        map: map,
+        icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+    });
+
+    var station_marker = new google.maps.Marker({
+        position: {lat: sLat, lng: sLng},
+        map: map,
+        icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+    });
+    
+    var line = new google.maps.Polyline({
+        path: path,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+    }).setMap(map);
 }

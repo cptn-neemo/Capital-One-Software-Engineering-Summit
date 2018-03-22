@@ -11,7 +11,7 @@ address_file = open('station_addresses.txt', 'r').read()
 station_number = 1
 for line in address_file.splitlines():
     #While loop is used because the geolocator does not work everytime for some reason. Loop is used to keep requesting
-    #The station until a valid location is received
+    #the station until a valid location is received
     while(True):
         try:
             location = geolocator.geocode(line + " SF")

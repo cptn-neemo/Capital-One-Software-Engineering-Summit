@@ -21,18 +21,22 @@ class Battalion:
         #Most likely dispatch for this Battalion for the time
         self.most_likely_dispatch = []
 
+    #Compute the average dispatch time
     def compute_avg_dispatch(self):
         self.dispatch_time_avg = self.total_dispatch_minutes / self.total_dispatch_count
 
+    #Compute average dispatch times for each type of dispatch
     def compute_type_dispatch_avg(self):
         for i in range(5):
             self.dispatch_type_time_avgs[i] = \
                 self.total_dispatch_type_minutes[i] / self.dispatch_type_counts[i]
 
+    #Create a json representation of the Battalion object
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,
                           sort_keys=True, indent=4)
 
+    #Create a string representation of the Battalion object
     def to_string(self):
         retString = "Battalion: " + str(self.number) + '\n' + \
         "Total dispatches: " + str(self.total_dispatch_count) + \
