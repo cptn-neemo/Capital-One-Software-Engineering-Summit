@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
 
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="./css/address_predictor.css">
     <link rel="stylesheet" href="./css/main.css">
 
+    <title>Battalions</title>
+
 
     <script src="./js/battalion.js"></script>
 
@@ -23,10 +25,16 @@
         var battalions;
 
         $.getJSON('https://api.myjson.com/bins/ux6tx').then(function(data) {
+            //getJSON was clearing the page's title
+            document.title = "Battalions";
+            
+
             battalions = data;
             initValues();
             initVisuals();
         });
+
+
     </script>
 </head>
 <body>
@@ -42,7 +50,7 @@
                         <a class="nav-link" href="./index.html">Home</a>
                     </li>
                     <li class="nav-item" style="background-color: #4d4d4d">
-                            <a class="nav-link" href="./battalion.html">Battalions</a>
+                            <a class="nav-link" style="color: white;" href="./battalion.html">Battalions</a>
                     </li>
                     <li class="nav-item">
                             <a class="nav-link" href="./map.html">Map</a>
@@ -83,8 +91,8 @@
                     <canvas id = "dis_counts_bar"></canvas>    
                     <hr class = "my-2">
                     <p class="lead">
-                        One metric from this graph that I find interesting is the huge difference in the amount of dispatches between Battlion 1, Battalion 2, and the others.
-                        Battalion 1 and Battalion 2 have almost twice the amount of dispatches compared to the other battalions, which could be indicitive of a bad neighborhood or area.
+                        One metric from this graph that I find interesting is the huge difference in the amount of dispatches between Battlion 2, Battalion 3, and the others.
+                        Battalion 2 and Battalion 3 have almost twice the amount of dispatches compared to the other battalions, which could be indicitive of a bad neighborhood or area.
                     </p>          
                 </div>
             </div>
